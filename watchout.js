@@ -26,9 +26,19 @@ function update() {
 
   selection.data(positions).transition()
   .attr("x", xPos)
-  .attr("y", yPos);
+  .attr("y", yPos)
+  .tween(null, function(d,i,a) {
 
-  setTimeout(update, 300);
+    // console.log(counter, this.x.baseVal.value, this.y.baseVal.value);
+    collisionCheck(this.x.baseVal.value, this.y.baseVal.value);
+    // var i = d3.interpolateRound(0, 100);
+    // return function (t) {
+    //   console.log(this.x);
+    //   i(t);
+    
+  });
+
+  setTimeout(update, 5000);
 };
 
 function xPos(d) {
@@ -39,6 +49,22 @@ function yPos(d) {
   return d[1];
 };
 
+function collisionCheck(x, y) {
+  
+
+  if(Math.abs(player.attr('cx') - x) < 25 && Math.abs(player.attr('cy') - y) < 25) {
+    counter++;
+    d3.select('.collisions')
+    .select('span');
+    console.log(counter);
+  }
+
+  
+};
+
+
+
+var counter = 0;
 
 var drag = d3.behavior.drag()  
   .on('dragstart', function() { player.style('fill', 'red'); })
