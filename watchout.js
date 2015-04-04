@@ -23,6 +23,7 @@ function randomPositions() {
 
 function update() {
   randomPositions();
+  score++;
 
   selection.data(positions).transition()
   .attr("x", xPos)
@@ -38,7 +39,17 @@ function update() {
     
   });
 
-  setTimeout(update, 5000);
+  if (score > highScore) {
+    highScore = score;
+  }
+
+  d3.select('.current')
+    .select('span')[0][0].innerHTML = score;
+
+  d3.select('.high')
+    .select('span')[0][0].innerHTML = highScore;
+
+  setTimeout(update, 100);
 };
 
 function xPos(d) {
@@ -54,17 +65,18 @@ function collisionCheck(x, y) {
 
   if(Math.abs(player.attr('cx') - x) < 25 && Math.abs(player.attr('cy') - y) < 25) {
     counter++;
+    score = 0;
     d3.select('.collisions')
-    .select('span');
-    console.log(counter);
+      .select('span')[0][0].innerHTML = counter;
   }
 
   
 };
 
 
-
+var highScore = 0;
 var counter = 0;
+var score = 0;
 
 var drag = d3.behavior.drag()  
   .on('dragstart', function() { player.style('fill', 'red'); })
