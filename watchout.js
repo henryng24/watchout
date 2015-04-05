@@ -1,19 +1,6 @@
-// start slingin' some d3 here.
-
-// Benjamin's Brainstorming
-// ID on SVG tag
-// D3 adds asteroids and player
-// Have asteroids move to and from the edges (not just anywhere on the canvas)
 
 // <image x="90" y="-65" width="30" height="30" transform="rotate(45)" xlink:href="asteroid.png"/>
 
-// d3.select("svg")
-// .append("image")
-// .attr("x", 90)
-// .attr("y", 65)
-// .attr("width", 25)
-// .attr("height", 25)
-// .attr("xlink:href", "asteroid.png");
 
 function randomPositions() {
   for (var i = 0; i < 10; i++) {
@@ -25,19 +12,27 @@ function update() {
   randomPositions();
   score++;
 
-  selection.data(positions).transition()
-  .attr("x", xPos)
-  .attr("y", yPos)
-  .tween(null, function(d,i,a) {
-
-    // console.log(counter, this.x.baseVal.value, this.y.baseVal.value);
-    collisionCheck(this.x.baseVal.value, this.y.baseVal.value);
-    // var i = d3.interpolateRound(0, 100);
-    // return function (t) {
-    //   console.log(this.x);
-    //   i(t);
-    
-  });
+  selection.data(positions)
+    .transition()
+    .duration(10000)
+    .attr("x", xPos)
+    .attr("y", yPos)
+    .tween(null, function(d,i,a) {
+      return function (t) {
+        collisionCheck(this.x.baseVal.value, this.y.baseVal.value);
+        // if (Math.round(t * 100) % 2) {
+        //   this.setAttribute("height", 50);
+        //   this.setAttribute("width", 50);
+        //   this.setAttribute("transform", "translate(-25,-25)");
+        // } else {
+        //   this.setAttribute("height", 25);
+        //   this.setAttribute("width", 25);
+        //   this.setAttribute("transform", "translate(-12.5,-12.5)");
+        // }
+        // var asdf =  d3.interpolateRound(0, 100)
+        // console.log(asdf(t));
+      };
+    });
 
   if (score > highScore) {
     highScore = score;
@@ -49,7 +44,7 @@ function update() {
   d3.select('.high')
     .select('span')[0][0].innerHTML = highScore;
 
-  setTimeout(update, 100);
+  setTimeout(update, 20000);
 };
 
 function xPos(d) {
@@ -106,7 +101,11 @@ selection.enter()
   .attr("y", yPos)
   .attr("width", 25)
   .attr("height", 25)
+  .attr("transform", "translate(-12.5,-12.5)")
+  .attr("class", "spinner")
   .attr("xlink:href", "asteroid.png");
 
 update();
  // selection.transition().attr("x", 1150);
+
+
